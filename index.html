@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die ägyptischen Pyramiden – Ewigkeit in Stein</title>
+<meta name="description" content="Ein interaktiver Führer zu den ägyptischen Pyramiden: Gizeh, Chronologie, der Aufbau der Großen Pyramide, Mythen und ein Quiz.">
+<script>document.documentElement.className='js'</script>
+<style>
+@property --sky1{syntax:'<color>';inherits:true;initial-value:#060a1e}
+@property --sky2{syntax:'<color>';inherits:true;initial-value:#1a1d49}
+@property --sky3{syntax:'<color>';inherits:true;initial-value:#6a3a5b}
+@property --sky4{syntax:'<color>';inherits:true;initial-value:#d8834b}
+@property --p-light{syntax:'<color>';inherits:true;initial-value:#b98743}
+@property --p-dark{syntax:'<color>';inherits:true;initial-value:#5a3a1a}
+@property --dune1{syntax:'<color>';inherits:true;initial-value:#5a3d1e}
+@property --dune2{syntax:'<color>';inherits:true;initial-value:#33220f}
+:root{
+  --bg:#120e0a;--bg2:#19130c;--card:#221a10;--line:#3b2e1c;
+  --text:#f1e6cf;--muted:#bcab8a;--gold:#e3b24d;--ink:#1a1206;--hl:#ffd978;
+  --sky1:#060a1e;--sky2:#1a1d49;--sky3:#6a3a5b;--sky4:#d8834b;
+  --hero-text:#fff5df;--hero-muted:#e6d6b8;--hero-shadow:rgba(0,0,0,.45);
+  --p-light:#b98743;--p-dark:#5a3a1a;--dune1:#5a3d1e;--dune2:#33220f;--orb:#f4efe0;
+  --shadow:0 18px 40px rgba(0,0,0,.45);
+  --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+body.day{
+  --bg:#f6ecd6;--bg2:#efe2c4;--card:#fcf6e6;--line:#dbc79f;
+  --text:#2a1d0c;--muted:#665236;--gold:#8a560a;--ink:#fff8e8;--hl:#c2410c;
+  --sky1:#74b6e8;--sky2:#b5dbf5;--sky3:#f3e2ba;--sky4:#f9e6bd;
+  --hero-text:#2a1608;--hero-muted:#4a341c;--hero-shadow:rgba(255,255,255,.5);
+  --p-light:#e8c079;--p-dark:#a8773a;--dune1:#e3b76d;--dune2:#d2a155;--orb:#fff3b0;
+  --shadow:0 18px 40px rgba(90,60,10,.18);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  transition:--sky1 1s,--sky2 1s,--sky3 1s,--sky4 1s,--p-light 1s,--p-dark 1s,--dune1 1s,--dune2 1s,background-color .6s,color .6s}
+h1,h2,h3{font-family:var(--serif);line-height:1.12;text-wrap:balance}
+h3{font-size:1.45rem;margin:.3rem 0 .6rem}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1120px,100% - 2.5rem);margin-inline:auto}
+.narrow{max-width:760px}
+section{padding:clamp(4rem,9vw,7rem) 0;position:relative;transition:background-color .6s}
+.alt{background:var(--bg2)}
+.eyebrow{font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.h2{font-size:clamp(1.9rem,4.4vw,3.1rem);margin:.5rem 0 1rem}
+.lead{color:var(--muted);max-width:62ch;font-size:1.05rem}
+.note{color:var(--muted);font-size:.88rem;margin-top:.8rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(1.1rem,2.4vw,1.8rem);transition:background-color .6s,border-color .6s}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:var(--ink);font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.btn.ghost{background:transparent;color:inherit;border-color:currentColor}
+.swap{animation:fade .45s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.js .rv.in{opacity:1;transform:none}
+
+/* Kopfzeile */
+.bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--gold);transform-origin:left;transform:scaleX(0);z-index:60}
+.top{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:.8rem;padding:.9rem clamp(1rem,4vw,2.5rem);color:var(--hero-text);transition:background .3s,color .3s,box-shadow .3s,padding .3s}
+.top.solid{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text);box-shadow:0 1px 0 var(--line);padding-block:.55rem}
+.brand{display:flex;align-items:center;gap:.5rem;font-family:var(--serif);font-weight:700;font-size:1.15rem;text-decoration:none;color:inherit;margin-right:auto}
+.top nav{display:flex;gap:1.4rem}
+.top nav a{color:inherit;text-decoration:none;font-size:.93rem;font-weight:500;opacity:.85;position:relative;padding:.3rem 0}
+.top nav a:hover{opacity:1}
+.top nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s}
+.top nav a:hover::after{transform:scaleX(1)}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:1px solid currentColor;background:transparent}
+.icon-btn:hover{background:color-mix(in srgb,currentColor 14%,transparent)}
+.i-moon,body.day .i-sun{display:none}
+body.day .i-moon{display:block}
+.burger{display:none}
+
+/* Hero */
+.hero{min-height:100svh;display:grid;grid-template-rows:auto 1fr;padding:0;overflow:hidden;isolation:isolate;color:var(--hero-text);
+  background:linear-gradient(180deg,var(--sky1),var(--sky2) 42%,var(--sky3) 76%,var(--sky4))}
+#stars{position:absolute;inset:0;width:100%;height:100%;z-index:-1;transition:opacity .9s}
+body.day #stars{opacity:0}
+.hero-text{text-align:center;padding:clamp(6.5rem,13vh,9rem) 1.25rem 1.5rem;text-shadow:0 2px 26px var(--hero-shadow)}
+.hero .eyebrow{color:var(--hero-muted)}
+.hero h1{font-size:clamp(2.5rem,7.4vw,6rem);margin-top:.8rem}
+.hero p.sub{max-width:56ch;margin:1.1rem auto 1.8rem;color:var(--hero-muted);font-size:clamp(1rem,1.5vw,1.15rem)}
+.cta{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;text-shadow:none}
+.scene{position:relative;min-height:max(27.8vw,220px)}
+.scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.layer{transition:transform .3s ease-out}
+.pl{fill:var(--p-light)}.pd{fill:var(--p-dark)}.cap{fill:#fff;opacity:.22}
+.d1{fill:var(--dune1)}.d2{fill:var(--dune2)}.d3{fill:var(--bg);transition:fill .6s,transform .3s ease-out}
+.orb{fill:var(--orb);transition:fill .9s}
+
+/* Zahlen */
+.stats{padding:2.5rem 0 1rem}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.stat{padding:1.4rem .6rem;border-top:1px solid var(--line);text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--gold);line-height:1.15;font-variant-numeric:tabular-nums}
+.stat>span{color:var(--muted);font-size:.92rem}
+
+/* Gizeh */
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0 1.2rem}
+.tab{padding:.6rem 1.2rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font-weight:600;transition:.2s}
+.tab:hover{color:var(--text);border-color:var(--gold)}
+.tab[aria-selected=true]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.giza-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:1.2rem}
+.chart{overflow-x:auto;display:flex;flex-direction:column;justify-content:center}
+#chart{width:100%;min-width:520px;height:auto;display:block}
+#chart .g{cursor:pointer}
+#chart .solid{fill:color-mix(in srgb,var(--gold) 30%,var(--card));stroke:var(--gold);stroke-width:1.5;transition:fill .3s}
+#chart .ghost{fill:none;stroke:var(--muted);stroke-dasharray:4 4}
+#chart .g.on .solid{fill:var(--gold)}
+#chart text{font:600 20px var(--sans);fill:var(--muted);text-anchor:middle}
+#chart .g.on text{fill:var(--text)}
+#chart .grid{stroke:var(--line)}
+#chart .gl{font-size:16px;font-weight:500;text-anchor:end}
+.specs{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin:1.1rem 0}
+.specs div{padding:.75rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.specs dt{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.specs dd{font-family:var(--serif);font-size:1.25rem;font-weight:700}
+
+/* Chronologie */
+.tl{list-style:none;padding:0;margin-top:2.5rem;position:relative;display:grid;gap:1.2rem}
+.tl::before{content:"";position:absolute;left:19px;top:0;bottom:0;width:2px;background:linear-gradient(var(--gold),var(--line))}
+.tl li{position:relative;padding-left:56px}
+.tl li::before{content:"";position:absolute;left:12px;top:1.8rem;width:16px;height:16px;border-radius:50%;background:var(--bg2);border:2px solid var(--gold)}
+.tl .card{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:center}
+.tl svg{width:72px;height:48px;fill:var(--gold)}
+.tl .when{font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.tl p{color:var(--muted);font-size:.96rem}
+
+/* Schnitt */
+.inside-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:1.2rem;margin-top:2rem;align-items:start}
+#cut{width:100%;height:auto;display:block}
+#cut .rock{fill:var(--bg2)}
+#cut .body{fill:color-mix(in srgb,var(--gold) 26%,var(--card));stroke:var(--gold);stroke-width:1.5}
+#cut .f{fill:none;stroke:var(--muted);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s}
+#cut .room{fill:var(--card)}
+#cut .gallery{stroke-width:8}
+#cut .shaft{stroke-width:1.8;stroke-dasharray:5 4}
+#cut .relief{stroke-width:2}
+#cut .void{stroke-width:2;stroke-dasharray:4 4}
+#cut .f.hl{stroke:var(--hl);filter:drop-shadow(0 0 5px var(--hl))}
+#cut .lbl{font:700 16px var(--sans);fill:var(--muted)}
+.hs{cursor:pointer}
+.hs circle{fill:var(--card);stroke:var(--gold);stroke-width:2;transition:fill .25s}
+.hs text{font:700 12px var(--sans);fill:var(--gold);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.on circle{fill:var(--gold)}.hs.on text{fill:var(--ink)}
+.spots{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1rem}
+.spot{display:flex;align-items:center;gap:.5rem;padding:.4rem .85rem .4rem .4rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:.9rem;font-weight:500;transition:.2s}
+.spot b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--bg2);color:var(--gold);font-size:.78rem}
+.spot:hover{border-color:var(--gold)}
+.spot[aria-pressed=true]{border-color:var(--gold);color:var(--text)}
+.spot[aria-pressed=true] b{background:var(--gold);color:var(--ink)}
+
+/* Mythen */
+.flips{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:2rem}
+.flip{perspective:1200px;background:none;border:0;padding:0;text-align:left;width:100%}
+.flip-in{display:grid;height:100%;transition:transform .7s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.flip[aria-pressed=true] .flip-in{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;gap:.7rem;min-height:210px;padding:1.6rem;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text)}
+.face em{font-style:normal;font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.face strong{font-family:var(--serif);font-size:1.4rem;line-height:1.25}
+.face small{margin-top:auto;color:var(--muted);font-size:.86rem}
+.face.back{transform:rotateY(180deg);background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.face.back em{color:inherit;opacity:.8}
+
+/* Konstruktor */
+.build-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:2rem;align-items:center}
+.range{margin-top:1.8rem;font-weight:600}
+.range output{color:var(--gold);font-family:var(--serif);font-size:1.4rem;margin-left:.3rem}
+input[type=range]{width:100%;margin-top:.6rem;accent-color:var(--gold);height:28px}
+#pyr{display:flex;flex-direction:column;justify-content:flex-end;min-height:300px;--n:8}
+.row{display:flex;justify-content:center;align-items:flex-start}
+.row i{flex:0 0 min(calc(100%/var(--n)),46px);aspect-ratio:1.7;background:linear-gradient(180deg,var(--p-light),var(--p-dark));border:1px solid var(--card);border-radius:3px;animation:drop .5s both cubic-bezier(.3,1.4,.5,1);animation-delay:var(--d)}
+@keyframes drop{from{opacity:0;transform:translateY(-40px)}}
+
+/* Quiz */
+.qbar{height:6px;border-radius:99px;background:var(--bg2);overflow:hidden;margin:.6rem 0 1.4rem}
+.qbar i{display:block;height:100%;background:var(--gold);transition:width .4s}
+.opts{display:grid;gap:.6rem;margin:1.2rem 0}
+.opt{text-align:left;padding:.9rem 1.1rem;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--text);transition:.2s}
+.opt:not(:disabled):hover{border-color:var(--gold);transform:translateX(4px)}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:#3fa66a;background:color-mix(in srgb,#3fa66a 22%,var(--card))}
+.opt.no{border-color:#d2553f;background:color-mix(in srgb,#d2553f 22%,var(--card))}
+.expl{color:var(--muted);margin-bottom:1.2rem}
+.result{text-align:center;padding:1rem 0}
+.result b{display:block;font-family:var(--serif);font-size:3.4rem;color:var(--gold);line-height:1.1}
+.result p{color:var(--muted);margin:.6rem 0 1.4rem}
+
+footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;gap:1rem;justify-content:space-between;flex-wrap:wrap}
+footer a{color:var(--gold)}
+
+@media(min-width:861px){
+  .tl::before{left:calc(50% - 1px)}
+  .tl li{width:50%;padding:0 44px 0 0}
+  .tl li:nth-child(even){margin-left:50%;padding:0 0 0 44px}
+  .tl li::before{left:auto;right:-8px}
+  .tl li:nth-child(even)::before{left:-8px;right:auto}
+}
+@media(max-width:860px){
+  .burger{display:grid}
+  .top nav{position:absolute;top:100%;left:1rem;right:1rem;flex-direction:column;gap:0;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:.5rem;box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-8px);transition:.25s}
+  .top nav.open{opacity:1;visibility:visible;transform:none}
+  .top nav a{padding:.8rem 1rem}
+  .top nav a::after{display:none}
+  .giza-grid,.inside-grid,.build-grid{grid-template-columns:1fr}
+  .stats .wrap{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){.flips{grid-template-columns:1fr}.tl .card{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<header class="top" id="head">
+  <a class="brand" href="#hero">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3 22 20H2z" fill="currentColor" opacity=".55"/><path d="M12 3 22 20h-7z" fill="currentColor"/></svg>Pyramiden
+  </a>
+  <nav id="nav" aria-label="Hauptnavigation">
+    <a href="#giza">Gizeh</a><a href="#timeline">Chronologie</a><a href="#inside">Innen</a><a href="#myths">Mythen</a><a href="#builder">Konstruktor</a><a href="#quiz">Quiz</a>
+  </nav>
+  <button class="icon-btn" id="theme" aria-label="Tag- und Nachtmodus umschalten" aria-pressed="false">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><g class="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g><path class="i-moon" d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+  </button>
+  <button class="icon-btn burger" id="burger" aria-label="Menü" aria-expanded="false" aria-controls="nav">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</header>
+
+<main>
+<section class="hero" id="hero">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="hero-text">
+    <p class="eyebrow">Altes Reich · 4. Dynastie</p>
+    <h1>Die ägyptischen Pyramiden</h1>
+    <p class="sub">Seit fünfundvierzig Jahrhunderten stehen sie am Rande der Wüste – Grabmäler der Pharaonen, Höhepunkt der Ingenieurskunst und das letzte erhaltene der Sieben Weltwunder der Antike.</p>
+    <div class="cta"><a class="btn" href="#giza">Reise beginnen</a><a class="btn ghost" href="#inside">Hineinschauen</a></div>
+  </div>
+  <div class="scene">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <pattern id="rows" width="8" height="7" patternUnits="userSpaceOnUse"><rect width="8" height="1.2" fill="#000" opacity=".17"/></pattern>
+        <radialGradient id="halo"><stop offset="0" style="stop-color:var(--orb)" stop-opacity=".55"/><stop offset="1" style="stop-color:var(--orb)" stop-opacity="0"/></radialGradient>
+      </defs>
+      <g class="layer" data-depth="10"><circle cx="850" cy="50" r="80" fill="url(#halo)"/><circle class="orb" cx="850" cy="50" r="24"/></g>
+      <path class="layer d1" data-depth="14" d="M-60 300Q240 268 480 292T960 286T1500 280V400H-60Z"/>
+      <g class="layer" data-depth="22">
+        <polygon class="pd" points="900,298 1130,84 1050,312"/><polygon class="pl" points="1050,312 1130,84 1380,298"/><polygon fill="url(#rows)" points="900,298 1130,84 1380,298 1050,312"/>
+        <polygon class="pd" points="470,304 720,60 640,322"/><polygon class="pl" points="640,322 720,60 990,304"/><polygon fill="url(#rows)" points="470,304 720,60 990,304 640,322"/>
+        <polygon class="cap" points="680,99 720,60 763,99 707,102"/>
+        <polygon class="pd" points="190,306 330,180 285,318"/><polygon class="pl" points="285,318 330,180 480,306"/><polygon fill="url(#rows)" points="190,306 330,180 480,306 285,318"/>
+        <polygon class="pd" points="60,310 104,268 90,314"/><polygon class="pl" points="90,314 104,268 150,310"/>
+      </g>
+      <path class="layer d2" data-depth="34" d="M-60 322Q360 298 720 322T1500 312V400H-60Z"/>
+      <path class="layer d3" data-depth="50" d="M-60 356Q280 326 600 352T1100 354T1500 342V420H-60Z"/>
+    </svg>
+  </div>
+</section>
+
+<section class="stats" aria-label="Pyramiden in Zahlen"><div class="wrap">
+  <div class="stat rv"><b><span data-to="146.6" data-dec="1">146,6</span> m</b><span>ursprüngliche Höhe der Cheops-Pyramide</span></div>
+  <div class="stat rv"><b><span data-to="2.3" data-dec="1">2,3</span> Mio.</b><span>Steinblöcke in ihrem Mauerwerk</span></div>
+  <div class="stat rv"><b><span data-to="4500">4.500</span></b><span>Jahre stehen die Pyramiden von Gizeh</span></div>
+  <div class="stat rv"><b><span data-to="118">118</span>+</b><span>Pyramiden in Ägypten entdeckt</span></div>
+</div></section>
+
+<section id="giza"><div class="wrap">
+  <p class="eyebrow rv">Das Gizeh-Plateau</p>
+  <h2 class="h2 rv">Die drei großen Pyramiden</h2>
+  <p class="lead rv">Großvater, Sohn und Enkel – Cheops, Chephren und Mykerinos – errichteten ihre Grabmäler am Westufer des Nils in weniger als einem Jahrhundert. Wählen Sie eine Pyramide, um sie im gleichen Maßstab zu vergleichen.</p>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Pyramiden von Gizeh"></div>
+  <div class="giza-grid rv">
+    <div class="card chart">
+      <svg id="chart" viewBox="0 0 940 316" role="img" aria-label="Größenvergleich der drei Pyramiden von Gizeh"></svg>
+      <p class="note">Gestrichelt ist der ursprüngliche Umriss, gefüllt ist, was heute erhalten ist.</p>
+    </div>
+    <article class="card" id="info" role="tabpanel" aria-live="polite"></article>
+  </div>
+</div></section>
+
+<section id="timeline" class="alt"><div class="wrap">
+  <p class="eyebrow rv">Chronologie</p>
+  <h2 class="h2 rv">Von der Stufe zur perfekten Form</h2>
+  <p class="lead rv">Die perfekte Pyramide entstand nicht sofort: Die Baumeister fanden über Fehler, Einstürze und kühne Experimente zu ihr. Alle Daten sind ungefähre Werte.</p>
+  <ol class="tl" id="tl"></ol>
+</div></section>
+
+<section id="inside"><div class="wrap">
+  <p class="eyebrow rv">Schnitt</p>
+  <h2 class="h2 rv">Was sich im Inneren der Großen Pyramide verbirgt</h2>
+  <p class="lead rv">Die Cheops-Pyramide ist die einzige, deren Kammern nicht nur unter der Erde, sondern auch hoch im Mauerwerk liegen. Tippen Sie auf die Punkte, um ihre Gänge zu durchwandern.</p>
+  <div class="inside-grid rv">
+    <div class="card">
+      <svg id="cut" viewBox="0 0 800 520" role="img" aria-label="Schematischer Nord-Süd-Schnitt durch die Cheops-Pyramide">
+        <defs><pattern id="rows2" width="10" height="9" patternUnits="userSpaceOnUse"><rect width="10" height="1" fill="#000" opacity=".12"/></pattern></defs>
+        <rect class="rock" x="0" y="420" width="800" height="100"/>
+        <polygon class="body" points="100,420 400,38 700,420"/>
+        <polygon fill="url(#rows2)" points="100,420 400,38 700,420"/>
+        <path class="f" id="f-desc" d="M135 376L362 489H378"/>
+        <path class="f" d="M200 408L291 363M400 309H408"/>
+        <path class="f" d="M291 363H384"/>
+        <path class="f shaft" id="f-shaft" d="M408 300L265 210M442 300L534 208"/>
+        <path class="f gallery" id="f-gal" d="M291 363L400 309"/>
+        <rect class="f room" id="f-sub" x="378" y="478" width="38" height="18"/>
+        <path class="f room" id="f-queen" d="M384 368V354L394 346L404 354V368Z"/>
+        <rect class="f room" id="f-king" x="408" y="292" width="34" height="21"/>
+        <path class="f relief" id="f-rel" d="M408 286h34M408 280h34M408 274h34M408 268h34M406 264l19-10 19 10"/>
+        <rect class="f void" id="f-void" x="298" y="299" width="64" height="12" rx="6" transform="rotate(-26.4 330 305)"/>
+        <text class="lbl" x="66" y="412">N</text><text class="lbl" x="718" y="412">S</text>
+        <g id="hot"></g>
+      </svg>
+      <p class="note">Schematische Darstellung: Die Proportionen der Räume sind zur Veranschaulichung vergrößert. N — Norden, S — Süden.</p>
+    </div>
+    <div>
+      <div class="spots" id="spots"></div>
+      <article class="card" id="spotInfo" aria-live="polite"></article>
+    </div>
+  </div>
+</div></section>
+
+<section id="myths" class="alt"><div class="wrap">
+  <p class="eyebrow rv">Mythen und Fakten</p>
+  <h2 class="h2 rv">Woran man vergebens glaubt</h2>
+  <p class="lead rv">Rund um die Pyramiden ranken sich mehr Legenden als um jedes andere Denkmal. Drehen Sie die Karte um und erfahren Sie, was die Archäologie sagt.</p>
+  <div class="flips" id="flips"></div>
+</div></section>
+
+<section id="builder"><div class="wrap build-grid">
+  <div class="rv">
+    <p class="eyebrow">Konstruktor</p>
+    <h2 class="h2">Bauen Sie Ihre eigene Pyramide</h2>
+    <p class="lead">Bewegen Sie den Regler und rechnen Sie aus, was selbst ein bescheidenes Grabmal kosten würde. Zum Vergleich: Die Große Pyramide hatte rund 210 Schichten.</p>
+    <label class="range" for="lv">Anzahl der Schichten:<output id="lvOut" for="lv">8</output></label>
+    <input type="range" id="lv" min="2" max="14" value="8">
+    <dl class="specs" id="bStats"></dl>
+    <p class="note">Die Rechnung ist grob: ein Block von 2,5 t und 0,7 m Höhe, ein Block alle drei Minuten – das ungefähre Tempo der Bauleute Cheops’.</p>
+  </div>
+  <div class="card rv"><div id="pyr" aria-hidden="true"></div></div>
+</div></section>
+
+<section id="quiz" class="alt"><div class="wrap narrow">
+  <p class="eyebrow rv">Quiz</p>
+  <h2 class="h2 rv">Testen Sie sich</h2>
+  <div class="card rv" id="quizBox"></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Ein Bildungsprojekt. Daten und Maße beruhen auf den allgemein anerkannten Schätzungen der Ägyptologen und sind ungefähre Werte.</p>
+  <a href="#hero">Nach oben ↑</a>
+</div></footer>
+
+<script>
+(()=>{
+const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmt=(n,d=0)=>n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+const spec=(k,v)=>`<div><dt>${k}</dt><dd>${v}</dd></div>`;
+const swap=el=>{el.classList.remove('swap');void el.offsetWidth;el.classList.add('swap')};
+
+/* ---------- Daten ---------- */
+const G=[
+ {short:'Cheops',name:'Die Cheops-Pyramide',alt:'Cheops · „Horizont des Cheops“',h0:146.6,h:138.5,base:230.3,angle:'51°50′',year:'um 2560 v. Chr.',
+  text:'Die größte Pyramide Ägyptens und das einzige erhaltene Weltwunder der Antike. Fast 3 800 Jahre lang – bis zum Bau der Kathedrale von Lincoln im 14. Jahrhundert – war sie das höchste Bauwerk der Erde. Als Baumeister gilt Hemiunu, ein Neffe des Pharaos.'},
+ {short:'Chephren',name:'Die Chephren-Pyramide',alt:'Chephren · „Chephren ist groß“',h0:143.5,h:136.4,base:215.3,angle:'53°10′',year:'um 2530 v. Chr.',
+  text:'Nur drei Meter niedriger als ihre Nachbarin, steht sie aber auf höherem Grund und wirkt dadurch größer. An der Spitze ist ein Fragment der polierten Kalksteinverkleidung erhalten. Daneben liegt der Große Sphinx, der meist mit diesem Pharao in Verbindung gebracht wird.'},
+ {short:'Mykerinos',name:'Die Mykerinos-Pyramide',alt:'Menkaure · „Göttlich ist Menkaure“',h0:65.5,h:61,base:103.4,angle:'51°20′',year:'um 2510 v. Chr.',
+  text:'Die kleinste der drei: vom Volumen etwa zehnmal kleiner als die Cheops-Pyramide. Dafür sind ihre unteren Schichten mit kostbarem rotem Granit verkleidet, der aus Assuan, von über 800 km entfernt, herangeschafft wurde.'}
+];
+const T=[
+ {y:'um 2670 v. Chr.',n:'Die Djoser-Pyramide, Sakkara',s:'2,38 2,32 8,32 8,26 14,26 14,20 20,20 20,14 26,14 26,8 34,8 34,14 40,14 40,20 46,20 46,26 52,26 52,32 58,32 58,38',t:'Der Baumeister Imhotep stapelt sechs Stufen aus Stein übereinander. So entsteht das erste monumentale Steinbauwerk der Welt, etwa 62 m hoch.'},
+ {y:'um 2610 v. Chr.',n:'Die Pyramide von Meidum',s:'2,38 14,30 20,30 20,12 24,12 24,6 36,6 36,12 40,12 40,30 46,30 58,38',t:'Der Versuch, die Stufen in glatte Flächen zu verwandeln. Die äußere Verkleidung stürzte mit der Zeit ein – zurück blieb ein turmartiger Kern.'},
+ {y:'um 2600 v. Chr.',n:'Die Knickpyramide, Dahschur',s:'2,38 18,16 30,6 42,16 58,38',t:'Pharao Snofru beginnt mit einem Winkel von 54°, doch auf halbem Wege wird der Winkel auf 43° verringert. Dafür hat die Pyramide fast ihre gesamte Verkleidung bewahrt.'},
+ {y:'um 2590 v. Chr.',n:'Die Rote Pyramide, Dahschur',s:'2,38 30,10 58,38',t:'Die erste „echte“ Pyramide mit glatten Flächen vom Sockel bis zur Spitze. Höhe: etwa 105 m, der Winkel ist vorsichtig: 43°.'},
+ {y:'um 2560 v. Chr.',n:'Die Große Pyramide des Cheops, Gizeh',s:'4,38 30,4 56,38',t:'Der Sohn des Snofru vollendet die Form: 146,6 m hoch, die Seiten nach den Himmelsrichtungen ausgerichtet, auf Bruchteile eines Grades genau.'},
+ {y:'um 2530 v. Chr.',n:'Die Chephren-Pyramide und der Sphinx',s:'5,38 30,4 55,38',t:'Ein Komplex mit Totentempel, Prozessionsaufweg und dem Großen Sphinx, der aus einem zusammenhängenden Kalksteinfelsen gehauen wurde.'},
+ {y:'um 2510 v. Chr.',n:'Die Mykerinos-Pyramide',s:'14,38 30,18 46,38',t:'Die letzte der großen Pyramiden von Gizeh. Die Epoche der Giganten endet: spätere Pyramiden sind kleiner und einfacher gebaut.'}
+];
+const P=[
+ {n:'Eingang',x:118,y:364,f:'f-desc',t:'Der ursprüngliche Eingang liegt an der Nordseite, etwa 17 m über dem Boden. Heute betreten die Besucher das Bauwerk durch eine Bresche, die der Überlieferung nach im 9. Jahrhundert auf Befehl des Kalifen al-Mamun geschlagen wurde. Vom Eingang führt ein etwa 105 m langer Gang mit 26° Neigung nach unten.'},
+ {n:'Felskammer',x:436,y:487,f:'f-sub',t:'In den Felsuntergrund getrieben, etwa 30 m unter dem Erdboden, und unvollendet geblieben. Möglicherweise die ursprüngliche Grabkammer, die man während der Bauarbeiten aufgab.'},
+ {n:'Königinnenkammer',x:424,y:358,f:'f-queen',t:'Der Name ist Konvention – arabische Reisende haben ihn gegeben; bestattet wurden hier keine Königinnen. Die Kammer mit ihrem Satteldach liegt genau auf der Achse der Pyramide. Von ihr führen zwei schmale Schächte, verschlossen mit Stein-„Türen“ mit Kupferstiften.'},
+ {n:'Große Galerie',x:340,y:339,f:'f-gal',t:'Ein geneigter Raum von etwa 47 m Länge und 8,6 m Höhe. Sein gestuftes Kraggewölbe aus sieben vortretenden Steinschichten ist ein Meisterwerk der Ingenieurkunst des Alten Reiches.'},
+ {n:'Königskammer',x:462,y:303,f:'f-king',t:'Ausgekleidet mit rotem Granit aus Assuan: 10,5 × 5,2 m bei 5,8 m Höhe. Hier steht ein deckelloser Sarkophag aus Granit. Er ist breiter als der aufsteigende Gang – man muss ihn also schon während der Bauarbeiten eingesetzt haben.'},
+ {n:'Entlastungskammern',x:462,y:270,f:'f-rel',t:'Fünf niedrige Hohlräume über der Königskammer mit Granitbalken von bis zu 80 t und einem „Dach“ in Giebelform verteilen den Druck der Steinmasse. Hier haben sich Arbeitervermerke mit dem Namen Cheops erhalten.'},
+ {n:'Die Schächte',x:500,y:242,f:'f-shaft',t:'Schmale Kanäle mit einem Querschnitt von etwa 20 × 20 cm führen von der Königskammer zu den Flächen der Pyramide. Man nennt sie Luftschächte, doch ihre Bedeutung war höchstwahrscheinlich rituell – der Weg der Seele des Pharaos zu den Sternen.'},
+ {n:'„Der große Hohlraum“',x:290,y:324,f:'f-void',t:'Im Jahr 2017 entdeckte das Projekt ScanPyramids mit Hilfe der Myonenradiografie über der Großen Galerie einen unbekannten Hohlraum von mindestens 30 m Länge. Sein Zweck ist bis heute ein Rätsel.'}
+];
+const M=[
+ ['Die Pyramiden wurden von Sklaven erbaut','Errichtet wurden sie von angeworbenen Handwerkern und Bauern im Dienst des Königs. Nahe Gizeh wurde ihr Dorf mit Bäckereien und Brauereien ausgegraben, dazu die Gräber der Bauleute – Sklaven wurden so nicht bestattet.'],
+ ['Die Pyramiden waren immer sandfarben','Sie waren mit einer glatten Verkleidung aus weißem Kalkstein von Tura bedeckt, der in der Sonne strahlte. Im Mittelalter wurde sie abgetragen, um Kairo zu erbauen.'],
+ ['Niemand weiß, wie man die Steine transportierte','Papyri aus Wadi el-Djarf – das „Tagebuch des Merer“ – schildern, wie seine Truppe den Kalkstein von Tura auf Nil und Kanälen nach Gizeh brachte.'],
+ ['Die Wände im Inneren sind mit Hieroglyphen bedeckt','In den Pyramiden von Gizeh sind die Wände glatt. Die „Pyramidentexte“ erschienen erst zwei Jahrhunderte später – in der Pyramide des Unas in Sakkara, um 2350 v. Chr.']
+];
+const Q=[
+ {q:'Wer entwarf die erste Steinpyramide – die Stufenpyramide des Djoser?',o:['Hemiunu','Imhotep','Snofru','Merer'],a:1,e:'Imhotep war der Baumeister und Würdenträger Djosers; später verehrten die Ägypter ihn als Gott der Heilkunst.'},
+ {q:'Wie hoch war die Cheops-Pyramide ursprünglich?',o:['≈ 105 m','≈ 125 m','≈ 147 m','≈ 180 m'],a:2,e:'146,6 m. Heute, ohne Verkleidung und Spitze, sind es etwa 138,5 m.'},
+ {q:'An der Spitze welcher Pyramide hat sich die alte Verkleidung erhalten?',o:['Cheops','Chephren','Mykerinos','Djoser'],a:1,e:'Eine „Kappe“ aus poliertem Kalkstein hat sich an der Chephren-Pyramide erhalten.'},
+ {q:'Warum hat die Knickpyramide in Dahschur einen Knick in den Flächen?',o:['Sie wurde durch ein Erdbeben beschädigt','Die Bauleute verringerten den Neigungswinkel während der Arbeiten','Die Spitze wurde erst Jahrhunderte später vollendet','Es war Imhoteps Entwurf'],a:1,e:'Der Winkel wurde von 54° auf 43° verringert – vermutlich wegen Rissen und einer Setzung des Mauerwerks.'},
+ {q:'Wer baute nach heutigem archäologischem Wissen die Pyramiden von Gizeh?',o:['Sklaven, Kriegsgefangene','Angeworbene Arbeiter und Bauern im Dienst des Königs','Priester','Römische Legionäre'],a:1,e:'Die Ausgrabung des Baedorfes zeigte: Die Arbeiter wurden gut verpflegt, ärztlich versorgt und nahe den Pyramiden mit Ehren bestattet.'}
+];
+
+/* ---------- Thema, Kopfzeile, Menü ---------- */
+const body=document.body,head=$('#head'),bar=$('#bar'),nav=$('#nav'),burger=$('#burger'),themeBtn=$('#theme');
+let saved=null;try{saved=localStorage.getItem('pyr-theme')}catch(e){}
+const setTheme=d=>{body.classList.toggle('day',d);themeBtn.setAttribute('aria-pressed',d);themeBtn.title=d?'Nachtmodus einschalten':'Tagmodus einschalten'};
+setTheme(saved==='day');
+themeBtn.onclick=()=>{const d=!body.classList.contains('day');setTheme(d);try{localStorage.setItem('pyr-theme',d?'day':'night')}catch(e){}};
+const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;head.classList.toggle('solid',scrollY>40);bar.style.transform=`scaleX(${max>0?scrollY/max:0})`};
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+const menu=o=>{nav.classList.toggle('open',o);burger.setAttribute('aria-expanded',o)};
+burger.onclick=()=>menu(!nav.classList.contains('open'));
+nav.onclick=e=>{if(e.target.closest('a'))menu(false)};
+addEventListener('keydown',e=>{if(e.key==='Escape')menu(false)});
+
+/* ---------- Gizeh ---------- */
+const tabs=$('#tabs'),chart=$('#chart'),info=$('#info');
+(()=>{const S=1.6,Y=262;let x=18,s='';
+ [50,100,150].forEach(m=>{s+=`<line class="grid" x1="0" x2="940" y1="${Y-m*S}" y2="${Y-m*S}"/><text class="gl" x="936" y="${Y-m*S-6}">${m} m</text>`});
+ s+=`<line class="grid" x1="0" x2="940" y1="${Y}" y2="${Y}"/>`;
+ G.forEach((p,i)=>{const w=p.base*S,H=p.h0*S,h=p.h*S,c=x+w/2,tw=w/2*(1-p.h/p.h0);
+  s+=`<g class="g" data-i="${i}"><polygon class="solid" points="${x},${Y} ${c-tw},${Y-h} ${c+tw},${Y-h} ${x+w},${Y}"/><polygon class="ghost" points="${x},${Y} ${c},${Y-H} ${x+w},${Y}"/><text x="${c}" y="${Y+24}">${p.short}</text><text x="${c}" y="${Y+47}">${fmt(p.h0,1)} m</text></g>`;x+=w+16});
+ chart.innerHTML=s;
+ tabs.innerHTML=G.map((p,i)=>`<button class="tab" role="tab" data-i="${i}" aria-controls="info">${p.short}</button>`).join('');
+})();
+function pick(i){const p=G[i];
+ $$('.tab',tabs).forEach((t,k)=>t.setAttribute('aria-selected',k===i));
+ $$('.g',chart).forEach((g,k)=>g.classList.toggle('on',k===i));
+ info.innerHTML=`<p class="eyebrow">${p.alt}</p><h3>${p.name}</h3><dl class="specs">${spec('Ursprüngliche Höhe',fmt(p.h0,1)+' m')+spec('Höhe heute','≈ '+fmt(p.h,1)+' m')+spec('Seitenlänge der Basis',fmt(p.base,1)+' m')+spec('Neigungswinkel',p.angle)}</dl><p>${p.text}</p><p class="note">Erbaut ${p.year}</p>`;
+ swap(info)}
+tabs.onclick=e=>{const t=e.target.closest('.tab');if(t)pick(+t.dataset.i)};
+chart.onclick=e=>{const g=e.target.closest('.g');if(g)pick(+g.dataset.i)};
+pick(0);
+
+/* ---------- Chronologie ---------- */
+$('#tl').innerHTML=T.map(t=>`<li class="rv"><div class="card"><svg viewBox="0 0 60 40" aria-hidden="true"><polygon points="${t.s}"/></svg><div><span class="when">${t.y}</span><h3>${t.n}</h3><p>${t.t}</p></div></div></li>`).join('');
+
+/* ---------- Schnitt ---------- */
+const hot=$('#hot'),spots=$('#spots'),sInfo=$('#spotInfo');
+hot.innerHTML=P.map((p,i)=>`<g class="hs" data-i="${i}"><circle cx="${p.x}" cy="${p.y}" r="12"/><text x="${p.x}" y="${p.y}">${i+1}</text></g>`).join('');
+spots.innerHTML=P.map((p,i)=>`<button class="spot" data-i="${i}" aria-pressed="false"><b>${i+1}</b>${p.n}</button>`).join('');
+function spot(i){const p=P[i];
+ $$('.hs',hot).forEach((g,k)=>g.classList.toggle('on',k===i));
+ $$('.spot',spots).forEach((b,k)=>b.setAttribute('aria-pressed',k===i));
+ $$('#cut .f').forEach(f=>f.classList.toggle('hl',f.id===p.f));
+ sInfo.innerHTML=`<p class="eyebrow">Punkt ${i+1} von ${P.length}</p><h3>${p.n}</h3><p>${p.t}</p>`;swap(sInfo)}
+hot.onclick=e=>{const g=e.target.closest('.hs');if(g)spot(+g.dataset.i)};
+spots.onclick=e=>{const b=e.target.closest('.spot');if(b)spot(+b.dataset.i)};
+spot(0);
+
+/* ---------- Mythen ---------- */
+const flips=$('#flips');
+flips.innerHTML=M.map(m=>`<button class="flip rv" aria-pressed="false"><span class="flip-in"><span class="face"><em>Mythos</em><strong>${m[0]}</strong><small>Klicken Sie, um die Wahrheit zu erfahren →</small></span><span class="face back"><em>Fakt</em><span>${m[1]}</span></span></span></button>`).join('');
+flips.onclick=e=>{const b=e.target.closest('.flip');if(b)b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')};
+
+/* ---------- Konstruktor ---------- */
+const lv=$('#lv'),lvOut=$('#lvOut'),pyr=$('#pyr'),bStats=$('#bStats');
+function build(){const n=+lv.value,tot=n*(n+1)/2;let h='';
+ lvOut.textContent=n;pyr.style.setProperty('--n',n);
+ for(let r=1;r<=n;r++){const below=tot-r*(r+1)/2;h+='<div class="row">';
+  for(let j=0;j<r;j++)h+=`<i style="--d:${Math.round((below+j)*1200/tot)}ms"></i>`;h+='</div>'}
+ pyr.innerHTML=h;
+ const N=n*(n+1)*(2*n+1)/6,mins=N*3;
+ bStats.innerHTML=spec('Anzahl der Blöcke',fmt(N))+spec('Masse','≈ '+fmt(N*2.5)+' t')+spec('Höhe','≈ '+fmt(n*.7,1)+' m')+spec('Verlegezeit',mins<60?mins+' min':'≈ '+fmt(Math.round(mins/60))+' h')}
+lv.addEventListener('input',build);build();
+
+/* ---------- Quiz ---------- */
+const box=$('#quizBox');let qi=0,score=0;
+function renderQ(){const q=Q[qi];
+ box.innerHTML=`<p class="eyebrow">Frage ${qi+1} von ${Q.length}</p><div class="qbar"><i style="width:${qi/Q.length*100}%"></i></div><h3>${q.q}</h3><div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><div id="after" aria-live="polite"></div>`}
+function renderEnd(){const rank=score===Q.length?'Pharao':score>=3?'Hohepriester':'Schreiberschüler';
+ box.innerHTML=`<div class="result"><p class="eyebrow">Ihr Titel — ${rank}</p><b>${score} / ${Q.length}</b><p>${score===Q.length?'Fehlerfrei! Imhotep wäre stolz auf Sie.':'Richtige Antworten: '+score+'. Die Pyramiden hüten noch manches Geheimnis – versuchen Sie es erneut.'}</p><button class="btn" id="again">Nochmal versuchen</button></div>`}
+box.addEventListener('click',e=>{const b=e.target.closest('.opt');
+ if(b&&!b.disabled){const q=Q[qi],i=+b.dataset.i,ok=i===q.a;if(ok)score++;
+  $$('.opt',box).forEach((x,k)=>{x.disabled=true;if(k===q.a){x.classList.add('ok');x.textContent='✓ '+x.textContent}else if(k===i){x.classList.add('no');x.textContent='✗ '+x.textContent}});
+  $('#after').innerHTML=`<p class="expl"><strong>${ok?'Richtig!':'Nicht ganz.'}</strong> ${q.e}</p><button class="btn" id="next">${qi<Q.length-1?'Weiter →':'Ergebnis ansehen'}</button>`;
+  $('#next').focus({preventScroll:true})}
+ else if(e.target.id==='next'){qi++;qi<Q.length?renderQ():renderEnd()}
+ else if(e.target.id==='again'){qi=0;score=0;renderQ()}});
+renderQ();
+
+/* ---------- Einblenden und Zähler ---------- */
+function count(el){const to=+el.dataset.to,d=+el.dataset.dec||0,t0=performance.now();
+ (function f(t){const k=Math.min((t-t0)/1600,1);el.textContent=fmt(to*(1-Math.pow(1-k,3)),d);if(k<1)requestAnimationFrame(f)})(t0)}
+if('IntersectionObserver' in window){
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  if(!reduce)$$('[data-to]',e.target).forEach(count);io.unobserve(e.target)}}),{threshold:.12});
+ $$('.rv').forEach(el=>io.observe(el));
+}else $$('.rv').forEach(el=>el.classList.add('in'));
+
+/* ---------- Sterne und Parallaxe ---------- */
+const hero=$('#hero'),cv=$('#stars'),cx=cv.getContext('2d');let stars=[],seen=true,W=0,H=0;
+function sizeStars(){const d=Math.min(devicePixelRatio||1,2);W=hero.offsetWidth;H=hero.offsetHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+ stars=Array.from({length:Math.round(W*H/6500)},()=>({x:Math.random()*W,y:Math.random()*H*.72,r:Math.random()*1.2+.3,p:Math.random()*6.28,s:Math.random()*.9+.3}));drawStars(0,true)}
+function drawStars(t,once){
+ if(once||(seen&&!body.classList.contains('day'))){cx.clearRect(0,0,W,H);cx.fillStyle='#fff';
+  for(const s of stars){cx.globalAlpha=reduce?.8:.3+.7*Math.abs(Math.sin(s.p+t/1000*s.s));cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill()}}
+ if(!once&&!reduce)requestAnimationFrame(drawStars)}
+sizeStars();if(!reduce)requestAnimationFrame(drawStars);
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(sizeStars,200)});
+if('IntersectionObserver' in window)new IntersectionObserver(e=>{seen=e[0].isIntersecting}).observe(hero);
+if(!reduce&&matchMedia('(pointer:fine)').matches){const layers=$$('.layer');
+ hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
+  layers.forEach(l=>{const d=+l.dataset.depth;l.style.transform=`translate(${-dx*d}px,${-dy*d*.4}px)`})});
+ hero.addEventListener('pointerleave',()=>layers.forEach(l=>l.style.transform=''))}
+})();
+</script>
+</body>
+</html>
